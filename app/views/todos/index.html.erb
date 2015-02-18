@@ -7,6 +7,17 @@
   </h1>
 </div>
 
+<div class="row">
+  <div class="col-xs-12">
+    <%= form_tag "/todos"  do%>
+      <input name="content" type="text" class="form-control" placeholder="Add a new todo">
+      <input name="user_id" type="hidden" value="<%= current_user.id %>">
+    <% end %>
+  </div>
+</div>
+
+<hr>
+
 <!-- Responsive, Isotope-based layout example -->
 
 <div class="row">
