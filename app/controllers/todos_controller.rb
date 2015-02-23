@@ -16,6 +16,11 @@ class TodosController < ApplicationController
 
   def index
     @todos = current_user.todos
+
+    respond_to do |format|
+      format.html
+      format.json { render :json => @todos }
+    end
   end
 
   def show
