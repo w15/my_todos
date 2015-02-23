@@ -26,10 +26,8 @@ class TodosController < ApplicationController
   end
 
   def create
-    @todo = Todo.new
-    @todo.content = params[:content]
-    @todo.user_id = params[:user_id]
-
+    @todo = Todo.new(todo_params)
+    @todo.user = current_user
 
     if @todo.save
       redirect_to todos_url, :notice => "Todo created successfully."
@@ -41,9 +39,15 @@ class TodosController < ApplicationController
   def edit
   end
 
+  def todo_params
+    return params.require(:todo).permit(:content, :new_column)
+  end
+
   def update
-    @todo.content = params[:content]
-    @todo.user_id = params[:user_id]
+    @todo.update_attributes(todo_params)
+
+    # @todo.content = params[:todo][:content]
+    # @todo.user_id = params[:todo][:user_id]
 
     if @todo.save
       redirect_to todo_url(@todo.id), :notice => "Todo updated successfully."
