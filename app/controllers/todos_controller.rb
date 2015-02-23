@@ -1,10 +1,24 @@
 class TodosController < ApplicationController
+
+  before_action :set_todo, :only => [:edit, :update, :destroy, :show]
+
+  before_action :ensure_current_user_is_todo_owner, :only => [:edit, :update, :destroy]
+
+  def ensure_current_user_is_todo_owner
+    if current_user != @todo.user
+      redirect_to root_url, :notice => "Nice try, buddy"
+    end
+  end
+
+  def set_todo
+    @todo = Todo.find(params[:id])
+  end
+
   def index
     @todos = current_user.todos
   end
 
   def show
-    @todo = Todo.find(params[:id])
   end
 
   def new
@@ -25,12 +39,9 @@ class TodosController < ApplicationController
   end
 
   def edit
-    @todo = Todo.find(params[:id])
   end
 
   def update
-    @todo = Todo.find(params[:id])
-
     @todo.content = params[:content]
     @todo.user_id = params[:user_id]
 
@@ -42,8 +53,6 @@ class TodosController < ApplicationController
   end
 
   def destroy
-    @todo = Todo.find(params[:id])
-
     @todo.destroy
 
     redirect_to todos_url, :notice => "Todo deleted."
